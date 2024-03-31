@@ -23,7 +23,7 @@ function getKey(tbl:Array<String>, code:Int):Int {
 function input(event:openfl.events.KeyboardEvent):Void {
   if (game.controls.controllerMode) {return;}
   final key:Int = getKey(game.keysArray, event.keyCode);
-  if (key > 3 || key < 0) {return;}
+  if (key > game.playerStrums.length || key < 0) {return;}
   final called:String = game.controls.justPressed(game.keysArray[key]) ? 'Press' : game.controls.justReleased(game.keysArray[key]) ? 'Release' : '';
   if (called == '') {return;}
   game.callOnScripts('input' + called, [key]);
@@ -31,13 +31,12 @@ function input(event:openfl.events.KeyboardEvent):Void {
 }
 
 function inputPress(key:Int) {
-  if (game.paused || game.endingSong || game.cpuControlled || !game.generatedMusic || !game.startedCountdown ||
+  if (game.inCutscene || game.paused || game.endingSong || game.cpuControlled || !game.generatedMusic || !game.startedCountdown ||
   (notNull(game.boyfriend) && game.boyfriend.stunned) || game.strumsBlocked[key]) {return;}
   final keyPreCheck:Dynamic = game.callOnScripts('onKeyPressPre', [key]);
   if (keyPreCheck == funcStop) {return;}
   final lastTime:Float = Conductor.songPosition;
   if (!game.startingSong || lastTime >= 0) {Conductor.songPosition = FlxG.sound.music.time;}
-  final strum:StrumNote = game.playerStrums.members[key];
   var sortedNotesList:Array<Note> = [];
   if (game.notes.members.length != 0) {
     sortedNotesList = game.notes.members.filter(
@@ -52,10 +51,9 @@ function inputPress(key:Int) {
     final coolNote:Note = sortedNotesList[sortedNotesList.length - 1];
     if (sortedNotesList.length > 1) {
       for (epicNote in sortedNotesList) {
-        if (notNull(epicNote) && notNull(coolNote) && epicNote != coolNote &&
-        epicNote.strumTime - coolNote.strumTime <= 12.5 * (100 / Conductor.bpm)) {
-          destroyNote(epicNote);
-        }
+        if (!(notNull(epicNote) && notNull(coolNote) && epicNote != coolNote &&
+        epicNote.strumTime - coolNote.strumTime <= 12.5 * (100 / Conductor.bpm))) {continue;}
+        game.invalidateNote(epicNote);
       }
     }
     if (notNull(coolNote)) {game.goodNoteHit(coolNote);}
@@ -64,6 +62,7 @@ function inputPress(key:Int) {
     game.callOnScripts('onGhostTap', [key]);
     if (!ClientPrefs.data.ghostTapping) {game.noteMissPress(key);}
   }
+  final strum:StrumNote = game.playerStrums.members[key];
   if (notNull(strum) && strum.animation.curAnim.name != 'confirm') {
     strum.playAnim('pressed');
     strum.resetAnim = 0;
@@ -92,7 +91,9 @@ function inputRelease(key:Int) {
     if (sustainTbl.length != 0) {
       sustainTbl.sort((a:Note, b:Note) -> {return Std.int(b.strumTime - a.strumTime);});
       final tail:Note = sustainTbl[0];
-      if (notNull(tail) && !StringTools.endsWith(tail.animation.curAnim.name, 'end') && tail.parent.wasGoodHit) {game.noteMiss(tail);}
+      if (notNull(tail) && !StringTools.endsWith(tail.animation.curAnim.name, 'end') && tail.parent.wasGoodHit) {
+        game.noteMiss(tail);
+      }
       sustainTbl = [];
     }
   }
@@ -108,6 +109,17 @@ function inputRelease(key:Int) {
 function onCreatePost() {
   destroyEvents(game.onKeyPress, game.onKeyRelease);
   addEvents(input, input);
+  return;
+}
+
+function noteMiss(daNote:Note) {
+  if (!game.guitarHeroSustains) {return;}
+  var leTail:Array<Note> = daNote.isSustainNote ? daNote.parent.tail : daNote.tail;
+  if (leTail.length < 1) {return;}
+  for (tail in leTail) {
+    if (!notNull(tail)) {continue;}
+    game.invalidateNote(tail);
+  }
   return;
 }
 
