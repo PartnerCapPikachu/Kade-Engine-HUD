@@ -39,17 +39,15 @@ function onSpawnNote(daNote:Note) {
   return;
 }
 
-function goodNoteHit(daNote:Note) {
+function handleNoteVis(daNote:Note):Void {
   if (!daNote.isSustainNote) {return;}
-  daNote.visible = game.playerStrums.members[daNote.noteData].sustainReduce;
+  final strum:StrumNote = daNote.mustPress ? game.playerStrums.members[daNote.noteData] : game.opponentStrums.members[daNote.noteData];
+  daNote.visible = strum.sustainReduce;
   return;
 }
 
-function opponentNoteHit(daNote:Note) {
-  if (!daNote.isSustainNote) {return;}
-  daNote.visible = game.opponentStrums.members[daNote.noteData].sustainReduce;
-  return;
-}
+function goodNoteHit(_:Note) {handleNoteVis(_); return;}
+function opponentNoteHit(_:Note) {handleNoteVis(_); return;}
 
 function onDestroy() {
   Note.SUSTAIN_SIZE = noteSettings.onDestroySustainSize;
