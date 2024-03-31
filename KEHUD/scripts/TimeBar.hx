@@ -28,12 +28,16 @@ time.x = bg2.x;
 time.y = bg2.y;
 barGroup.add(time);
 
-var barTxt:FlxText = new FlxText(0, 0, FlxG.width, '', 16);
-barTxt.setFormat(Paths.font('vcr.ttf'), 16, 0xffffffff, 'center', FlxTextBorderStyle.OUTLINE, 0xff000000);
-barTxt.size = bg2.height + 5;
-barTxt.borderSize = 1;
-barTxt.y = bg2.y - bg2.height / 4;
-barTxt.antialiasing = ClientPrefs.data.antialiasing;
+var barTxt:FlxText = ClientPrefs.data.timeBarType == 'Disabled' ? null : new FlxText(0, 0, 0, ClientPrefs.data.timeBarType == 'Song Name' ? PlayState.SONG.song : '00:00', 16);
+if (barTxt != null) {
+  barTxt.setFormat(Paths.font('vcr.ttf'), 16, 0xffffffff, 'center', FlxTextBorderStyle.OUTLINE, 0xff000000);
+  barTxt.size = bg2.height + 5;
+  barTxt.borderSize = 1;
+  barTxt.fieldWidth = barTxt.fieldWidth;
+  barTxt.x = bg.x + bg.width / 2 - barTxt.width / 2;
+  barTxt.y = bg2.y - (bg2.height / 4);
+  barTxt.antialiasing = ClientPrefs.data.antialiasing;
+}
 barGroup.add(barTxt);
 
 function onCreatePost() {
@@ -47,7 +51,7 @@ function onSongStart() {
 }
 
 function onUpdatePost(elapsed:Float) {
-  if (barTxt.text != game.timeTxt.text) {barTxt.text = game.timeTxt.text;}
+  if (barTxt != null && barTxt.text != game.timeTxt.text) {barTxt.text = game.timeTxt.text;} // no need to change it every frame when it's the same usually
   time._frame.frame.width = songPercent * bg2.width;
   return;
 }
