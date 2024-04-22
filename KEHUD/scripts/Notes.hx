@@ -1,23 +1,25 @@
-// kadeSustains - If true, sustain length is altered to look like kade.
-// onDestroySustainSize - Resets the sustain size int.
-// customSustainSize - The specific size you'd like it to be if kadeSustains is true. Must be an int.
-// onDestroyNoteOffset - Resets the global note offset.
-// newNoteOffset - The specific offset you'd like the notes to be delayed by. Must be an int.
-// noCliprect - If true, the strum's cliprect for sustain being help is turned off when loaded and sustains will just have their visible setting turned to false.
-// allowFullAlphaSustains - If true, sustain copyAlpha is disabled and their multAlpha becomes 1.
-var noteSettings:Object<Dynamic> = {
-  kadeSustains: true,
-  onDestroySustainSize: 0,
-  customSustainSize: 22,
-  onDestroyNoteOffset: 0,
-  newNoteOffset: 0,
-  noCliprect: true,
-  allowFullAlphaSustains: true
-};
+import tjson.TJSON.parse;
+
+final path:String = Paths.mods('KEHUD/modSettings/Notes.json');
+var destroyScript:Bool = false;
+
+if (!FileSystem.exists(path)) {
+  destroyScript = true;
+  debugPrint('Notes.hx (ERROR): Failed to find settings json for script.\n  Aborting script to save Psych performance.', 0xffff0000);
+}
+
+if (destroyScript) {
+  return game.hscriptArray.remove(game.hscriptArray[game.hscriptArray.indexOf(this)]);
+}
+
+final noteSettings = parse(File.getContent(path));
 
 if (noteSettings.kadeSustains) {
   noteSettings.onDestroySustainSize = Note.SUSTAIN_SIZE;
   Note.SUSTAIN_SIZE = noteSettings.customSustainSize;
+  if (PlayState.isPixelStage) {
+    noteSettings.pixelSustainSize = Note.SUSTAIN_SIZE / noteSettings.onDestroySustainSize;
+  }
 }
 
 noteSettings.onDestroyNoteOffset = ClientPrefs.data.noteOffset;
@@ -25,29 +27,42 @@ if (ClientPrefs.data.noteOffset != noteSettings.newNoteOffset) {
   ClientPrefs.data.noteOffset = noteSettings.newNoteOffset;
 }
 
-function onCountdownStarted() {
+function onCountdownStarted():Void {
   for (strum in game.strumLineNotes.members) {
     strum.sustainReduce = !noteSettings.noCliprect;
   }
   return;
 }
 
-function onSpawnNote(daNote:Note) {
-  if (!daNote.isSustainNote) {return;}
-  if (noteSettings.allowFullAlphaSustains) {daNote.multAlpha = 1;}
-  if (noteSettings.kadeSustains && PlayState.isPixelStage) {daNote.scale.y /= 2;}
+function onSpawnNote(daNote:Note):Void {
+  if (daNote.isSustainNote) {
+    if (noteSettings.allowFullAlphaSustains) {
+      daNote.multAlpha = 1;
+    }
+    if (noteSettings.kadeSustains && PlayState.isPixelStage) {
+      daNote.scale.y *= noteSettings.pixelSustainSize;
+    }
+  }
   return;
 }
 
 function handleNoteVis(daNote:Note):Void {
-  if (!daNote.isSustainNote) {return;}
-  final strum:StrumNote = daNote.mustPress ? game.playerStrums.members[daNote.noteData] : game.opponentStrums.members[daNote.noteData];
-  daNote.visible = strum.sustainReduce;
+  if (daNote.isSustainNote) {
+    final strum:StrumNote = daNote.mustPress ? game.playerStrums.members[daNote.noteData] : game.opponentStrums.members[daNote.noteData];
+    daNote.visible = strum.sustainReduce;
+  }
   return;
 }
 
-function goodNoteHit(_:Note) {handleNoteVis(_); return;}
-function opponentNoteHit(_:Note) {handleNoteVis(_); return;}
+function goodNoteHit(_:Note):Void {
+  handleNoteVis(_);
+  return;
+}
+
+function opponentNoteHit(_:Note):Void {
+  handleNoteVis(_);
+  return;
+}
 
 function onDestroy() {
   Note.SUSTAIN_SIZE = noteSettings.onDestroySustainSize;
