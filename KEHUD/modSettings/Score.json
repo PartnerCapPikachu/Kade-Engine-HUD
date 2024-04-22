@@ -1,0 +1,39 @@
+{
+  "_score": {
+    "_stickToX": false,
+    "_show": {
+      "_nps": true,
+      "_score": true,
+      "_misses": true,
+      "_ms": true,
+      "_accuracy": true,
+      "_rank": true,
+      "_fc": true
+    }
+  },
+  "_nps": {
+    "_nps": [],
+    "_max": 0
+  },
+  "_ms": {
+    "_ms": 0,
+    "_timings": [],
+    "_average": 0,
+    "_accuracy": 0,
+    "_useColors": true,
+    "_msCounterColors": ["0xff00ffff", "0xff008000", "0xffff0000"],
+    "_alphaDuration": 0
+  },
+  "_ratings": {
+    "_use": true,
+    "_kade": [
+      ["F", 0], ["D", 0.5], ["C", 0.6], ["B", 0.7],
+      ["A", 0.8], ["A.", 0.85], ["A:", 0.9],
+      ["AA", 0.93], ["AA.", 0.9650], ["AA:", 0.99],
+      ["AAA", 0.9970], ["AAA.", 0.9980], ["AAA:", 0.999],
+      ["AAAA", 0.99955], ["AAAA.", 0.9997], ["AAAA:", 0.9998],
+      ["AAAAA", 0.999935]
+    ],
+    "_base": []
+  }
+}

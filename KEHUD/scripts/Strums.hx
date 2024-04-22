@@ -1,20 +1,29 @@
-// useNewStrumPosition - If true, strum positions get replaced.
-// kadeStrumPosition - If true, strums' x axis is altered like KE. Works with useNewStrumPosition.
-var strumSettings:Object<Dynamic> = {
-  useNewStrumPosition: true,
-  kadeStrumPosition: true
-};
+import tjson.TJSON.parse;
 
-function onCountdownStarted() {
+final path:String = Paths.mods('KEHUD/modSettings/Strums.json');
+var destroyScript:Bool = false;
+
+if (!FileSystem.exists(path)) {
+  destroyScript = true;
+  debugPrint('Strums.hx (ERROR): Failed to find settings json for script.\n  Aborting script to save Psych performance.', 0xffff0000);
+}
+
+if (destroyScript) {
+  return game.hscriptArray.remove(game.hscriptArray[game.hscriptArray.indexOf(this)]);
+}
+
+final strumSettings = parse(File.getContent(path));
+
+function onCountdownStarted():Void {
   for (i in 0...4) {
     if (strumSettings.useNewStrumPosition) {
-      final mult:Int = 112 * i + 1;
       final kadeAmt:Int = strumSettings.kadeStrumPosition ? 56 : 0;
-      var xToUseOpp:Float = 112 + mult - kadeAmt;
-      var xToUsePlr:Float = FlxG.width - 560 + mult - kadeAmt;
+      final subt:Int = 112 * i + 1 - kadeAmt;
+      var xToUseOpp:Float = 112 + subt;
+      var xToUsePlr:Float = FlxG.width - 560 + subt;
       if (ClientPrefs.data.middleScroll) {
-        xToUseOpp = i > 1 ? FlxG.width - 560 : 112 + mult;
-        xToUsePlr = screenWidth * 0.5 - 224 + mult;
+        xToUseOpp = i > 1 ? FlxG.width - 112 * (5 - i) - kadeAmt : 112 + subt;
+        xToUsePlr = FlxG.width * 0.5 - 224 + subt;
       }
       var yToUseOpp:Float = game.opponentStrums.members[i].height * 0.5;
       var yToUsePlr:Float = game.playerStrums.members[i].height * 0.5;
@@ -27,7 +36,9 @@ function onCountdownStarted() {
       game.playerStrums.members[i].x = xToUsePlr;
       game.playerStrums.members[i].y = yToUsePlr;
     } else {
-      if (!strumSettings.kadeStrumPosition) {break;}
+      if (!strumSettings.kadeStrumPosition) {
+        break;
+      }
       game.opponentStrums.members[i].x -= 56;
       game.playerStrums.members[i].x -= 56;
     }
