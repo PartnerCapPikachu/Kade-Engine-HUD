@@ -1,0 +1,2 @@
+enabled
+- Self explanatory. If false, icons will zoom normally.

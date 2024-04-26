@@ -8,11 +8,6 @@ import backend.CoolUtil.floorDecimal;
 
 final start:Float = stamp();
 
-final printTime:Bool = true;
-if (!printTime) {
-  return game.hscriptArray.remove(game.hscriptArray[game.hscriptArray.indexOf(this)]);
-}
-
 var timeLoadedTxt:FlxText = new FlxText(FlxG.width, 0, 0, start, 16);
 timeLoadedTxt.alpha = 0.0001;
 timeLoadedTxt.cameras = [game.camOther];
@@ -27,6 +22,7 @@ function onUpdate(elapsed:Float):Void {
   if (justLoaded) {
     return;
   }
+
   justLoaded = true;
 
   timeLoadedTxt.text = 'Start of load -> text update:\n' + floorDecimal(stamp() - start, 3) + ' seconds';
@@ -34,13 +30,12 @@ function onUpdate(elapsed:Float):Void {
   timeLoadedTxt.x -= timeLoadedTxt.width;
   timeLoadedTxt.alpha = 1;
   FlxTween.tween(timeLoadedTxt, {alpha: 0}, 0.4 + (game.stepCrochet * 0.004) / game.playbackRate, {startDelay: 1 + Conductor.crochet * 0.0015 / playbackRate,
-    onComplete: function(t:FlxTween):Dynamic {
-      timeLoadedTxt.active = false;
+    onComplete: (t:FlxTween) -> {
       timeLoadedTxt.kill();
       remove(timeLoadedTxt);
       timeLoadedTxt.destroy();
       timeLoadedTxt = null;
-      return game.hscriptArray.remove(game.hscriptArray[game.hscriptArray.indexOf(this)]);
+      return;
     }
   });
 

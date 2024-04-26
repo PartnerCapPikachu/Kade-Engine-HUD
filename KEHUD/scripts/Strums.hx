@@ -1,18 +1,6 @@
 import tjson.TJSON.parse;
 
-final path:String = Paths.mods('KEHUD/modSettings/Strums.json');
-var destroyScript:Bool = false;
-
-if (!FileSystem.exists(path)) {
-  destroyScript = true;
-  debugPrint('Strums.hx (ERROR): Failed to find settings json for script.\n  Aborting script to save Psych performance.', 0xffff0000);
-}
-
-if (destroyScript) {
-  return game.hscriptArray.remove(game.hscriptArray[game.hscriptArray.indexOf(this)]);
-}
-
-final strumSettings = parse(File.getContent(path));
+final strumSettings = parse(File.getContent(Paths.mods('KEHUD/modSettings/Strums.json')));
 
 function onCountdownStarted():Void {
   for (i in 0...4) {

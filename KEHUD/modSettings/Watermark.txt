@@ -1,0 +1,14 @@
+show
+- If false, skips the creation of the text.
+
+trick
+- If true, makes it look similar to Kade Engine.
+
+versionToTrick
+- If trick is true, the value of this is set to the watermark.
+
+simpleText
+If true, the watermark will be a little smaller and compact.
+
+stickToLeft
+- If true, the watermark will start from the left of the screen instead of being centered.
