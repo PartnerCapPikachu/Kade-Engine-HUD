@@ -1,37 +1,19 @@
 import tjson.TJSON.parse;
 import backend.CoolUtil;
 
-final path:String = Paths.mods('KEHUD/modSettings/Other.json');
-var destroyScript:Bool = false;
-
-if (!FileSystem.exists(path)) {
-  destroyScript = true;
-  debugPrint('Other.hx (ERROR): Failed to find settings json for script.\n  Aborting script to save Psych performance.', 0xffff0000);
-}
-
-if (destroyScript) {
-  return game.hscriptArray.remove(game.hscriptArray[game.hscriptArray.indexOf(this)]);
-}
-
-final miscSettings = parse(File.getContent(path));
+final miscSettings = parse(File.getContent(Paths.mods('KEHUD/modSettings/Other.json')));
 
 function onCreatePost():Void {
-
   game.camZooming = miscSettings.startWithCamZooming && PlayState.SONG.song.toLowerCase() != 'tutorial';
-
+  game.grpNoteSplashes.visible = game.grpNoteSplashes.visible && !miscSettings.forceDisableSplashes;
   if (miscSettings.forceHealthBarColors) {
-    game.healthBar.leftBar.color = CoolUtil.colorFromString(miscSettings.hpColors.leftColor);
-    game.healthBar.rightBar.color = CoolUtil.colorFromString(miscSettings.hpColors.rightColor);
+    game.healthBar.leftBar.color = CoolUtil.colorFromString(miscSettings.hpColors.leftColor ??= '0xffff0000');
+    game.healthBar.rightBar.color = CoolUtil.colorFromString(miscSettings.hpColors.rightColor ??= '0xff67fe33');
   }
-
-  game.grpNoteSplashes.visible = !miscSettings.forceDisableSplashes;
-
   if (miscSettings.kadeBotplayTxtPosition) {
     game.botplayTxt.y += ClientPrefs.data.downScroll ? -450 : 450;
   }
-
   return;
-
 }
 
 function noteStuff(daNote:Note):Void {

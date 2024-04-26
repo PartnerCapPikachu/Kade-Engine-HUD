@@ -4,8 +4,8 @@ import openfl.text.TextFormat;
 import flixel.util.FlxStringUtil.formatBytes;
 
 // remove this line if you wanna actually use this script
-// this line just removes this script
-return game.hscriptArray.remove(game.hscriptArray[game.hscriptArray.indexOf(this)]);
+// it just prevents this script from running what's below
+return;
 
 function trueTextScale(?number:Null<Float>):Int {
   number ??= 12;
@@ -27,18 +27,25 @@ final oldUpdate:Dynamic = fpsVar.updateText;
 var times:Array<Float> = [];
 var avr:Float = 0;
 fpsVar.updateText = () -> {
+
   times.push(FlxG.elapsed);
+
   var total:Float = 0;
   for (time in times) {
     total += time * 1000;
   }
+
   avr = Math.floor(total / times.length);
+
   if (times.length >= FlxG.drawFramerate) {
     times = [];
   }
+
   fpsVar.text = 'FPS: ' + fpsVar.currentFPS + ' [' + avr + 'MS]\nGCM: ' + formatBytes(fpsVar.memoryMegas);
   fpsVar.textColor = fpsVar.currentFPS < FlxG.drawFramerate * 0.5 ? 0xff0000 : 0xffffffff;
+
   return;
+
 }
 
 function onDestroy():Void {

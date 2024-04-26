@@ -4,19 +4,7 @@ import backend.CoolUtil;
 import flixel.text.FlxText;
 import flixel.text.FlxTextBorderStyle;
 
-final path:String = Paths.mods('KEHUD/modSettings/Score.json');
-var destroyScript:Bool = false;
-
-if (!FileSystem.exists(path)) {
-  destroyScript = true;
-  debugPrint('Score.hx (ERROR): Failed to find settings json for script.\n  Aborting script to save Psych performance.', 0xffff0000);
-}
-
-if (destroyScript) {
-  return game.hscriptArray.remove(game.hscriptArray[game.hscriptArray.indexOf(this)]);
-}
-
-final scoreSettings = parse(File.getContent(path));
+final scoreSettings = parse(File.getContent(Paths.mods('KEHUD/modSettings/Score.json')));
 
 function trueTextScale(?number:Null<Float>):Int {
   number ??= 12;
@@ -42,8 +30,14 @@ function calcMs(?getHitTime:Bool):Float {
 }
 
 scoreSettings._ratings._base = PlayState.ratingStuff;
-if (scoreSettings._ratings._use) {
+if (scoreSettings._ratings._use && scoreSettings._ratings._kade.length != 0) {
   PlayState.ratingStuff = scoreSettings._ratings._kade;
+}
+
+final lmao:Array<String> = ['0xff00ffff', '0xff008000', '0xffff0000'];
+scoreSettings._ms._msCounterColors ??= lmao;
+for (i in 0...lmao.length) {
+  scoreSettings._ms._msCounterColors[i] ??= lmao[i];
 }
 
 final msCounter:FlxText = new FlxText(0, 0, 0, '-000.000ms', trueTextScale(36));
@@ -80,10 +74,11 @@ function onCreatePost():Void {
 }
 
 function onUpdatePost(elapsed:Float):Void {
-  if (scoreSettings._nps._nps.length != 0) {
-    for (time in scoreSettings._nps._nps) {
+  if (scoreSettings._nps._nps != 0) {
+    for (time in scoreSettings._nps._npsArray) {
       if (time < Conductor.songPosition) {
-        scoreSettings._nps._nps.remove(time);
+        scoreSettings._nps._npsArray.remove(time);
+        scoreSettings._nps._nps = scoreSettings._nps._npsArray.length;
         onUpdateScore();
       }
     }
@@ -105,9 +100,10 @@ function goodNoteHit(daNote:Note):Void {
 
   if (!game.cpuControlled) {
 
-    scoreSettings._nps._nps[scoreSettings._nps._nps.length] = daNote.strumTime + 1000;
-    if (scoreSettings._nps._max < scoreSettings._nps._nps.length) {
-      scoreSettings._nps._max = scoreSettings._nps._nps.length;
+    scoreSettings._nps._npsArray[scoreSettings._nps._npsArray.length] = daNote.strumTime + 1000;
+    scoreSettings._nps._nps = scoreSettings._nps._npsArray.length;
+    if (scoreSettings._nps._max < scoreSettings._nps._nps) {
+      scoreSettings._nps._max = scoreSettings._nps._nps;
     }
 
     scoreSettings._ms._timings.push(scoreSettings._ms._ms = CoolUtil.floorDecimal(daNote.strumTime - Conductor.songPosition + ClientPrefs.data.ratingOffset, 3));
@@ -154,7 +150,7 @@ function onUpdateScore(?miss:Bool):Void {
   final _show:Object<Dynamic> = scoreSettings._score._show;
 
   final scoreStr:Array<Dynamic> = [
-    ['NPS: ' + scoreSettings._nps._nps.length + ' (' + scoreSettings._nps._max + ')', _show._nps, ' | '],
+    ['NPS: ' + scoreSettings._nps._nps + ' (' + scoreSettings._nps._max + ')', _show._nps, ' | '],
     ['Score: ' + game.songScore, _show._score, ' | '],
     ['Combo Breaks: ' + game.songMisses, _show._misses, ' | '],
     ['Average: ' + scoreSettings._ms._average + 'ms (' + scoreSettings._ms._accuracy + '%)', _show._ms, ' | '],

@@ -1,0 +1,24 @@
+startWithCamZooming
+- If true, the camera will start zooming without the need of the opponent hitting a note. This is always disabled on Tutorial.
+
+forceHealthBarColors
+- If true, the health bar's left and right colors will use base game's values (which should be the default values of hpColors).
+If a certain PlayState function is called, however, this can be overriden.
+
+hpColors
+- leftColor is the color for the opponent's health bar color. If blank, a new one is set automatically (0xffff0000).
+- rightColor is the color for the player's health bar color. If blank, a new one is set automatically (0xff67fe33).
+
+forceDisableSplashes
+If true, the note splashes are forced to be hidden, alongside the existing visible value.
+
+kadeBotplayTxtPosition
+If true, the botplay text during botplay will have a position right above or below the health bar's y position.
+
+kadeCharacterHoldTimers
+If true, the character's animation will last a little less time. Dependant on the bpm.
+
+kadeNoStrumAnimations
+- Does nothing.
+- (Before, ) If true, the opponent's strum line won't play an animation even if they hit a note. Additionally,
+the player's strum line won't play an animation during botplay when their note is hit, too.

@@ -2,9 +2,10 @@ import openfl.Lib.application;
 import flixel.group.FlxTypedSpriteGroup;
 import flixel.text.FlxText;
 import flixel.text.FlxTextBorderStyle;
+import flixel.math.FlxMath;
 
 if (ClientPrefs.data.timeBarType == 'Disabled' || ClientPrefs.data.hideHud) {
-  return game.hscriptArray.remove(game.hscriptArray[game.hscriptArray.indexOf(this)]);
+  return;
 }
 
 final barGroup:FlxTypedSpriteGroup = new FlxTypedSpriteGroup();
@@ -14,7 +15,7 @@ add(barGroup);
 
 final bg:FlxSprite = new FlxSprite().makeGraphic(605, 25, 0xff000000); // edit bulk here
 bg.x = FlxG.width * 0.5 - bg.width * 0.5;
-bg.y = ClientPrefs.data.downScroll ? (FlxG.height - bg.height) - 10 : 10;
+bg.y = ClientPrefs.data.downScroll ? FlxG.height - bg.height - 10 : 10;
 barGroup.add(bg);
 
 final bg2:FlxSprite = new FlxSprite().makeGraphic(bg.width - 10, bg.height - 10, 0xff808080);
@@ -43,12 +44,12 @@ function onCreatePost():Void {
 }
 
 function onSongStart():Void {
-  FlxTween.tween(barGroup, {alpha: 1}, 0.4 + 0.004 * game.stepCrochet / game.playbackRate);
+  FlxTween.tween(barGroup, {alpha: 1}, 0.4 + game.stepCrochet * 0.004 / game.playbackRate);
   return;
 }
 
 function onUpdatePost(elapsed:Float):Void {
-  time._frame.frame.width = game.songPercent * bg2.width;
+  time._frame.frame.width = FlxMath.bound(game.songPercent * bg2.width, 0, bg2.width);
   if (barTxt != null && barTxt.text != game.timeTxt.text) {
     barTxt.text = game.timeTxt.text; // no need to change it every frame when it's the same usually
   }

@@ -190,7 +190,6 @@ function noteMiss(daNote:Note):Void {
 
   if (daNote.isSustainNote) {
     daNote.blockHit = true;
-    daNote.active = false;
     daNote.kill();
   }
 
@@ -201,7 +200,6 @@ function noteMiss(daNote:Note):Void {
   for (tail in leTail) {
     if (notNull(tail)) {
       tail.blockHit = true;
-      tail.active = false;
       tail.kill();
     }
   }

@@ -1,18 +1,6 @@
 import tjson.TJSON.parse;
 
-final path:String = Paths.mods('KEHUD/modSettings/Notes.json');
-var destroyScript:Bool = false;
-
-if (!FileSystem.exists(path)) {
-  destroyScript = true;
-  debugPrint('Notes.hx (ERROR): Failed to find settings json for script.\n  Aborting script to save Psych performance.', 0xffff0000);
-}
-
-if (destroyScript) {
-  return game.hscriptArray.remove(game.hscriptArray[game.hscriptArray.indexOf(this)]);
-}
-
-final noteSettings = parse(File.getContent(path));
+final noteSettings = parse(File.getContent(Paths.mods('KEHUD/modSettings/Notes.json')));
 
 if (noteSettings.kadeSustains) {
   noteSettings.onDestroySustainSize = Note.SUSTAIN_SIZE;
