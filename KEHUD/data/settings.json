@@ -1,0 +1,170 @@
+[
+
+  {
+    "save": "KadeIconBopEnabled",
+    "name": "Icon Bops",
+    "type": "bool",
+    "description": "If enabled, the icons will bop more closely to Kade Engine.",
+    "value": true
+  },
+
+  {
+    "save": "KadeSustainsEnabled",
+    "name": "Sustains",
+    "type": "bool",
+    "description": "If enabled, sustains will look more accurate towards older Kade Engine builds.",
+    "value": true
+  },
+  {
+    "save": "KadeSustainScale",
+    "name": "Sustain Scale",
+    "type": "int",
+    "description": "Custom scale of the sustains. Requires 'Kade Sustains' to work.\nDefault scale is 44.",
+    "value": 22
+  },
+  {
+    "save": "KadeSustainCliprectEnabled",
+    "name": "Sustain Cliprect",
+    "type": "bool",
+    "description": "If enabled, sustains will simply disappear upon inputting them instead of clipping through the strum.",
+    "value": true
+  },
+  {
+    "save": "KadeSustainAlpha",
+    "name": "Sustain Alpha",
+    "type": "bool",
+    "description": "If enabled, sustains' alpha values become full.",
+    "value": true
+  },
+
+  {
+    "save": "KadeStartWithZooming",
+    "name": "Game Zooming",
+    "type": "bool",
+    "description": "If enabled, the song will start with camZooming enabled.\nDoes not work for Tutorial.",
+    "value": true
+  },
+  {
+    "save": "KadeHealthBarColors",
+    "name": "Forced Health Colors",
+    "type": "bool",
+    "description": "If enabled, the health bar's colors will be set to the ones found in base game/early Kade Engine, or a custom set one.",
+    "value": true
+  },
+  {
+    "save": "KadeBotplayTextPos",
+    "name": "New Botplay Text Position",
+    "type": "bool",
+    "description": "If enabled, the botplay text will have a new position more closer to the health bar.",
+    "value": true
+  },
+  {
+    "save": "KadeNoStrumAnimations",
+    "name": "Strum Animations",
+    "type": "bool",
+    "description": "If enabled, the opponents strums will stay static, even if they hit a note. Your strums will also not play an animation during botplay.",
+    "value": true
+  },
+  {
+    "save": "KadeCharacterHoldTimers",
+    "name": "New Character Hold Times",
+    "type": "bool",
+    "description": "If enabled, the characters' hold timers will be extended based on the bpm. This makes them sing for a little less time.",
+    "value": true
+  },
+
+  {
+    "save": "KadeScoreStuckToStartingPosition",
+    "name": "Score Text Consistent Position",
+    "type": "bool",
+    "description": "If enabled, the new score text's x position won't center when the text changes.\nNot normally recommended.",
+    "value": false
+  },
+  {
+    "save": "KadeShowNpsInScoreTxt",
+    "name": "Show NPS in Score Text",
+    "type": "bool",
+    "description": "If disabled, the NPS part of the score text becomes hidden.",
+    "value": true
+  },
+  {
+    "save": "KadeShowScoreInScoreTxt",
+    "name": "Show Score in Score Text",
+    "type": "bool",
+    "description": "If disabled, the Score part of the score text becomes hidden.\nErm... is it really 'scoreTxt' at that point?",
+    "value": true
+  },
+  {
+    "save": "KadeShowMissesInScoreTxt",
+    "name": "Show Misses in Score Text",
+    "type": "bool",
+    "description": "If disabled, the Misses part of the score text becomes hidden.",
+    "value": true
+  },
+  {
+    "save": "KadeShowMsInScoreTxt",
+    "name": "Show MS in Score Text",
+    "type": "bool",
+    "description": "If disabled, the MS part of the score text becomes hidden.",
+    "value": true
+  },
+  {
+    "save": "KadeShowAccuracyInScoreTxt",
+    "name": "Show Accuracy in Score Text",
+    "type": "bool",
+    "description": "If disabled, the Accuracy part of the score text becomes hidden.",
+    "value": true
+  },
+  {
+    "save": "KadeShowRankInScoreTxt",
+    "name": "Show Rank in Score Text",
+    "type": "bool",
+    "description": "If disabled, the Rank part of the score text becomes hidden.",
+    "value": true
+  },
+  {
+    "save": "KadeShowFcInScoreTxt",
+    "name": "Show FC in Score Text",
+    "type": "bool",
+    "description": "If disabled, the FC part of the score text becomes hidden.",
+    "value": true
+  },
+
+  {
+    "save": "KadeNewStrumPosition",
+    "name": "New Strum Positions",
+    "type": "bool",
+    "description": "If enabled, the strum positions get recalculated.\nThis will accumulate with 'Kade Strum Positions'.",
+    "value": true
+  },
+  {
+    "save": "KadeStrumPosition",
+    "name": "Kade Strum Positions",
+    "type": "bool",
+    "description": "If enabled, the strum position gets shifted to the left a bit.",
+    "value": true
+  },
+
+  {
+    "save": "KadeShowWatermark",
+    "name": "Show Watermark",
+    "type": "bool",
+    "description": "If disabled, hides the watermark.",
+    "value": true
+  },
+  {
+    "save": "KadeSimpleWatermark",
+    "name": "Simple Watermark",
+    "type": "bool",
+    "description": "If enabled, the watermark text becomes much more simpler.",
+    "value": false
+  },
+  {
+    "save": "KadeStickWatermarkToLeft",
+    "name": "Watermark Consistent Position",
+    "type": "bool",
+    "description": "If enabled, the watermark's x position sticks to the left.",
+    "value": false
+  }
+
+]
