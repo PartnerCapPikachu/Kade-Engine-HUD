@@ -1,5 +1,0 @@
-useNewStrumPosition
-- If true, the strum line have a new calculated position.
-
-kadeStrumPosition
-- If true, the x position for the strum line will be shifted to the left. This also accounts for useNewStrumPosition.

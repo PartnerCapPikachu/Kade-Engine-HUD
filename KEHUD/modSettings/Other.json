@@ -1,9 +1,0 @@
-{
-  "startWithCamZooming": true,
-  "forceHealthBarColors": true,
-  "hpColors": {"leftColor": "0xffff0000", "rightColor": "0xff67fe33"},
-  "forceDisableSplashes": true,
-  "kadeBotplayTxtPosition": true,
-  "kadeCharacterHoldTimers": true,
-  "kadeNoStrumAnimations": false
-}
