@@ -1,5 +1,3 @@
-import psychlua.LuaUtils.getModSetting;
-
 if (getModSetting('KadeIconBopEnabled', 'KEHUD')) {
   game.updateIconsScale = (elapsed:Float) -> {
     for (i in [game.iconP1, game.iconP2]) {

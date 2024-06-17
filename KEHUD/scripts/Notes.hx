@@ -1,11 +1,16 @@
-import psychlua.LuaUtils.getModSetting;
-
 var onDestroySustainSize:Int = 44;
 var pixelSustainSize:Float = 1;
 
-if (getModSetting('KadeSustainsEnabled', 'KEHUD')) {
+final options:Object<Bool> = {
+  kadeSustains: getModSetting('KadeSustainsEnabled', 'KEHUD'),
+  kadeSustainScale: getModSetting('KadeSustainScale', 'KEHUD'),
+  kadeSustainCliprect: !getModSetting('KadeSustainCliprectEnabled', 'KEHUD'),
+  kadeSustainFullAlpha: getModSetting('KadeSustainAlpha', 'KEHUD')
+};
+
+if (options.kadeSustains) {
   onDestroySustainSize = Note.SUSTAIN_SIZE;
-  Note.SUSTAIN_SIZE = getModSetting('KadeSustainScale', 'KEHUD');
+  Note.SUSTAIN_SIZE = options.kadeSustainScale;
   if (PlayState.isPixelStage) {
     pixelSustainSize = Note.SUSTAIN_SIZE / onDestroySustainSize;
   }
@@ -13,17 +18,17 @@ if (getModSetting('KadeSustainsEnabled', 'KEHUD')) {
 
 function onCountdownStarted():Void {
   for (strum in game.strumLineNotes.members) {
-    strum.sustainReduce = !getModSetting('KadeSustainCliprectEnabled', 'KEHUD');
+    strum.sustainReduce = options.kadeSustainCliprect;
   }
   return;
 }
 
 function onSpawnNote(daNote:Note):Void {
   if (daNote.isSustainNote) {
-    if (getModSetting('KadeSustainAlpha', 'KEHUD')) {
+    if (options.kadeSustainFullAlpha) {
       daNote.multAlpha = 1;
     }
-    if (getModSetting('KadeSustainsEnabled', 'KEHUD') && PlayState.isPixelStage) {
+    if (options.kadeSustains && PlayState.isPixelStage) {
       daNote.scale.y *= pixelSustainSize;
     }
   }
