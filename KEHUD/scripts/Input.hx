@@ -38,7 +38,7 @@ function input(event:KeyboardEvent):Void {
           return a != null && a.noteData == key && a.mustPress && a.canBeHit && !a.tooLate &&
           !a.wasGoodHit && !a.missed && !a.hitByOpponent && !a.noteWasHit && a.spawned && !a.blockHit && !a.isSustainNote;
         });
-        if (sortedNotesList.length != 0 && game.strumsBlocked[key]) {
+        if (sortedNotesList.length != 0 && !game.strumsBlocked[key]) {
           sortedNotesList.sort(sortNotesByPriority);
           game.goodNoteHit(sortedNotesList[sortedNotesList.length - 1]);
           sortedNotesList = [];
